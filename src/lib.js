@@ -7,8 +7,6 @@ import Scene from './Scene'
 import Prop from './Prop'
 import startScene from './functions'
 
-console.log('ENTRY POINT', Scene)
-
 export {
     Vector,
     utils,

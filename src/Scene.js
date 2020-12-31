@@ -35,7 +35,9 @@ export default class Scene {
 
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    if(this.updateArray){this.updateArray.forEach((f)=>{f.bind(this)()})};
+    if(this.updateArray){
+      this.updateArray.forEach((f)=>{f.bind(this)()})
+    };
 
     this.controllers.forEach(c=> { c.runController() });
 

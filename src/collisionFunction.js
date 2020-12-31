@@ -1,30 +1,23 @@
 import utils from './utilities'
 
+/* 
+
+This function is called inside of a prop. 'this' in the function will always refer to the prop that's calling it. 
+
+*/
+
 export default function collisionFunction() {
+  // Why not use a forEach? is it slower? scope?
   for (let i = 0; i < this.collisionCandidates.length; i++) {
 
     let coColliders = []
 
+      // if there is a collision ...
       if (utils.rectIntersect(this.collisionCandidates[i], this) && this.collisionCandidates[i] != this) {
 
+        // not even sure if this is working
         coColliders.push(this.collisionCandidates[i])
         
-        // the co-colliders should be passed as an array to account for frames where more than one collision is happening. 
-        // As far as terrain goes: its position can be fixed in customFunctions. We'll need a way for props to override the collision 
-        // behaviour in this function. Terrain will override this behaviour and, when it deects a collision, it will set this.collisionCandidates[i]'s 
-        // x or y velocity to 0, depending on whether the terrain is vertical or horizontal. 
-
-        /*
-          for collision response: let's try moving the blocks out of collision by simply adding or subtracting their penetration depth 
-          from their position vector, then applying f = ma. moving them out of collision before applying f=ma should prevent the jelly-like
-          collisions we were seeing when we used f=ma on its own. Using acceleration as opposed to penetration depth should (hopefully) prevent
-          over-response to collisions
-        */
-
-        /* 
-         How can this collision algorithm be made extensible? Think about how many times you've changed the collision behaviour so far. 
-         How can we make it so that designers have that level of control, but don't ever have to mess with this long, unweildy function? 
-        */
 
         if(this.collisionFunctions){
           this.collisionFunctions.forEach(cfunc => {
@@ -33,13 +26,16 @@ export default function collisionFunction() {
         })
       }
 
-      // if(this.stackable){
-      //   if(this.collisionCandidates[i].platform){
-      //     this.platform = true;
-      //   } else this.platform = false
-      // }
+
         
         if (this.solid) {
+
+          // the logic that checks collision angle can probably be split into its own function that takes two props as parameters
+          // and returns a string indicating the collision direction. then the code will be re-written like this
+          // if (checkCollisionDirection(this, collisionCandidates[i]) === 'bottom'){
+          //      //do the math for a bottom collision
+          // }
+
           let player_bottom = this.position._y + this.height;
           let tiles_bottom =
             this.collisionCandidates[i].position._y + this.collisionCandidates[i].height;
@@ -58,14 +54,15 @@ export default function collisionFunction() {
             t_collision < r_collision
           ) {
             
-            if(this.collisionCandidates[i].platform){
+            if(this.collisionCandidates[i].platform){ // the logic that handles collision for platforms
 
               // this line will have to be added to left and right collisions to prevent tunneling 
               this.position._y = this.collisionCandidates[i].position._y - this.height
               this.velocity._y = this.velocity._y * -1
               this.velocity._y *= 0.8
 
-              if(Math.abs(this.velocity._y) < 6){ // the 6 shouldn't be hard coded. perhaps it should be derrived from elasticity?
+              
+              if(Math.abs(this.velocity._y) < 6){ // if its y velocity is less than 6, make it zero. prevents endless jittering of stacked props.  
                 this.velocity._y = 0
                 this.position._y = this.collisionCandidates[i].position._y - this.height
                 this.platform = true  
@@ -76,8 +73,12 @@ export default function collisionFunction() {
               (_f / this.collisionCandidates[i].mass) * (this.elasticity * this.collisionCandidates[i].elasticity);    
             } 
             
-            else {       
-              this.platform = false      
+            else { 
+              // this is the regular collision funciton. can probably be split into its own function that takes a string as an arg
+              // ('left', 'right', 'bottom', 'top') and applies the appropriate operations
+
+              this.platform = false     
+
               let _f = this.mass * this.velocity.getLength();
               this.collisionCandidates[i].velocity._y +=
               (_f / this.collisionCandidates[i].mass) *
@@ -131,10 +132,12 @@ export default function collisionFunction() {
           }
         }
 
+        // telling the prop about its co-collider
         this.colliding = {
           bool: true,
           coCollider: this.collisionCandidates[i]
         }
+
     } else {
       this.colliding = {
       bool: false,

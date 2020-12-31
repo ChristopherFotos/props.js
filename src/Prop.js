@@ -1,4 +1,4 @@
-import collisionFunction from './collisionFunction'
+import collisionFunction from './collisionFunction-copy'
 import Vector from './Vector'
 
 export default class Prop {
@@ -38,6 +38,7 @@ export default class Prop {
       controls = [],
       bitmap
     } = {}
+
   ) {
     this.scene = scene;
     this.shape = shape;
@@ -76,7 +77,7 @@ export default class Prop {
     this.customProperties = customProperties;
     this.customFunctions = customFunctions;
     this.collisionFunctions = collisionFunctions;
-    this.colliding = false;
+    this.colliding = {};
     this.collisionCandidates = [];
     this.checkedCollisionPairs = [];
     this.cells = [];

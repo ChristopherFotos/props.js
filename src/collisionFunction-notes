@@ -1,0 +1,24 @@
+// the co-colliders should be passed as an array to account for frames where more than one collision is happening. 
+        // As far as terrain goes: its position can be fixed in customFunctions. We'll need a way for props to override the collision 
+        // behaviour in this function. Terrain will override this behaviour and, when it deects a collision, it will set this.collisionCandidates[i]'s 
+        // x or y velocity to 0, depending on whether the terrain is vertical or horizontal. 
+
+        /*
+          for collision response: let's try moving the blocks out of collision by simply adding or subtracting their penetration depth 
+          from their position vector, then applying f = ma. moving them out of collision before applying f=ma should prevent the jelly-like
+          collisions we were seeing when we used f=ma on its own. Using acceleration as opposed to penetration depth should (hopefully) prevent
+          over-response to collisions
+        */
+
+        /* 
+         How can this collision algorithm be made extensible? Think about how many times you've changed the collision behaviour so far. 
+         How can we make it so that designers have that level of control, but don't ever have to mess with this long, unweildy function? 
+        */
+
+deleted from the function: 
+      // if(this.stackable){
+      //   if(this.collisionCandidates[i].platform){
+      //     this.platform = true;
+      //   } else this.platform = false
+      // }
+      
