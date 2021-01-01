@@ -1,4 +1,4 @@
-import collisionFunction from './collisionFunction-copy'
+import collisionFunction from './collisionFunction'
 import Vector from './Vector'
 
 export default class Prop {

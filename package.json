@@ -1,11 +1,11 @@
 {
-  "name": "refactor",
-  "version": "1.0.0",
-  "main": "app.js",
+  "name": "propsjs",
+  "version": "1.0.1",
+  "main": "./src/dist/props.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "christopherfotos",
   "license": "ISC",
   "dependencies": {
     "webpack": "^5.11.1"
